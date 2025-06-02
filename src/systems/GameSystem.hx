@@ -1,5 +1,6 @@
 package systems;
 
+import resources.Queues;
 import resources.GameState;
 import ecs.Universe;
 import resources.DisplayResources;
@@ -8,11 +9,11 @@ import components.*;
 import Types.CollisionGroup;
 import h2d.Text;
 
-//System that is responsible for setting up levels & reacting to win conditions
+// System that is responsible for setting up levels & reacting to win conditions
 class GameSystem extends System {
 	@:fullFamily var gameState:{
 		requires:{},
-		resources:{state:GameState, displayResources:DisplayResources}
+		resources:{state:GameState, displayResources:DisplayResources, queues:Queues}
 	};
 
 	public override function update(dt:Float) {
@@ -36,23 +37,24 @@ class GameSystem extends System {
 				state.levelComplete = false;
 				// TODO: Unload level resources, start next level
 			}
+			// Sample request, consumed by Move System
+			queues.queueRequest(new ExampleRequest1(5));
 		});
 	}
 
 	public function initLevel1(displayResources:DisplayResources) {
-			final playerObject = universe.createEntity();
-			final obstacle1 = universe.createEntity();
-			final obstacle2 = universe.createEntity();
-			final finishSpot = universe.createEntity();
+		final playerObject = universe.createEntity();
+		final obstacle1 = universe.createEntity();
+		final obstacle2 = universe.createEntity();
+		final finishSpot = universe.createEntity();
 
-			universe.setComponents(playerObject, new Position(0, 0), new Velocity(10, 10), new Sprite(hxd.Res.circle, displayResources.scene, 50, 50),
-				new PlayerControlled(), new Collidable(CollisionGroup.Player, [CollisionGroup.Obstacles]));
-			universe.setComponents(obstacle1, new Position(100, 100), new Sprite(hxd.Res.circle_red, displayResources.scene, 50, 50),
-				new Collidable(CollisionGroup.Obstacles, [CollisionGroup.Player]));
-			universe.setComponents(obstacle2, new Position(200, 200), new Sprite(hxd.Res.circle_red, displayResources.scene, 50, 50),
-				new Collidable(CollisionGroup.Obstacles, [CollisionGroup.Player]));
-			universe.setComponents(finishSpot, new Position(400, 400), new Sprite(hxd.Res.circle_green, displayResources.scene, 50, 50),
-				new Collidable(CollisionGroup.FinishSpot, [CollisionGroup.Player]), new Goal());
-		
+		universe.setComponents(playerObject, new Position(0, 0), new Velocity(10, 10), new Sprite(hxd.Res.circle, displayResources.scene, 50, 50),
+			new PlayerControlled(), new Collidable(CollisionGroup.Player, [CollisionGroup.Obstacles]));
+		universe.setComponents(obstacle1, new Position(100, 100), new Sprite(hxd.Res.circle_red, displayResources.scene, 50, 50),
+			new Collidable(CollisionGroup.Obstacles, [CollisionGroup.Player]));
+		universe.setComponents(obstacle2, new Position(200, 200), new Sprite(hxd.Res.circle_red, displayResources.scene, 50, 50),
+			new Collidable(CollisionGroup.Obstacles, [CollisionGroup.Player]));
+		universe.setComponents(finishSpot, new Position(400, 400), new Sprite(hxd.Res.circle_green, displayResources.scene, 50, 50),
+			new Collidable(CollisionGroup.FinishSpot, [CollisionGroup.Player]), new Goal());
 	}
 }

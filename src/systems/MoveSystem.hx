@@ -5,13 +5,14 @@ import ecs.System;
 import components.Position;
 import components.Velocity;
 import resources.InputCapture;
+import resources.Queues;
 import Types.GameAction;
 
-//System responsible for updating entity Positions based on Velocity
-//Also contains logic for altering player velocity based on key input (could easily be separated into its own system)
+// System responsible for updating entity Positions based on Velocity
+// Also contains logic for altering player velocity based on key input (could easily be separated into its own system)
 class MoveSystem extends System {
 	@:fastFamily var movables:{pos:Position, vel:Velocity};
-	@:fullFamily var playerMovables:{requires:{pos:Position, vel:Velocity, playerControlled:PlayerControlled}, resources:{inputCapture:InputCapture}};
+	@:fullFamily var playerMovables:{requires:{pos:Position, vel:Velocity, playerControlled:PlayerControlled}, resources:{inputCapture:InputCapture, queues:Queues}};
 
 	override function update(_dt:Float) {
 		iterate(movables, {
@@ -21,6 +22,10 @@ class MoveSystem extends System {
 
 		setup(playerMovables, {
 			iterate(playerMovables, {
+				// Sample queue consumption
+				var x = queues.consumeRequests(ExampleRequest1);
+				// trace(x);
+
 				if (inputCapture.getActionStatus(GameAction.MoveUp))
 					vel.y -= playerControlled.acceleration * _dt;
 				else if (inputCapture.getActionStatus(GameAction.MoveDown))
@@ -41,15 +46,14 @@ class MoveSystem extends System {
 				}
 
 				// Cap velocity to max speed grid-wise
-				if(Math.abs(vel.x) > playerControlled.maxSpeed)
-					vel.x = playerControlled.maxSpeed * Math.abs(vel.x) / vel.x; 
-				if(Math.abs(vel.y) > playerControlled.maxSpeed)
-					vel.y = playerControlled.maxSpeed * Math.abs(vel.y) / vel.y; 
-				
+				if (Math.abs(vel.x) > playerControlled.maxSpeed)
+					vel.x = playerControlled.maxSpeed * Math.abs(vel.x) / vel.x;
+				if (Math.abs(vel.y) > playerControlled.maxSpeed)
+					vel.y = playerControlled.maxSpeed * Math.abs(vel.y) / vel.y;
 
 				// Cap velocity to max speed
 				if (vel.x * vel.x + vel.y * vel.y > playerControlled.maxSpeed * playerControlled.maxSpeed) {
-					trace(vel.x + " : " + vel.y);
+					// trace(vel.x + " : " + vel.y);
 					var velX = vel.x;
 					var velY = vel.y;
 
@@ -57,10 +61,10 @@ class MoveSystem extends System {
 						velX = vel.x / ((Math.abs(vel.x) + Math.abs(vel.y)) / playerControlled.maxSpeed);
 					if (vel.y != 0)
 						velY = vel.y / ((Math.abs(vel.x) + Math.abs(vel.y)) / playerControlled.maxSpeed);
-					
-					 if(vel.x == 0 && velX != 0)
+
+					if (vel.x == 0 && velX != 0)
 						vel.x = playerControlled.initialImpulse * playerControlled.maxSpeed * Math.abs(velX) / velX;
-					 if(vel.y == 0 && velY != 0)
+					if (vel.y == 0 && velY != 0)
 						vel.y = playerControlled.initialImpulse * playerControlled.maxSpeed * Math.abs(velY) / velY;
 					vel.x = velX;
 					vel.y = velY;

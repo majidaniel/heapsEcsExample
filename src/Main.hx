@@ -30,7 +30,8 @@ class Main extends hxd.App {
 		var displayResources = new DisplayResources(s2d);
 		var inputCapturer = new InputCapture();
 		var gameState = new GameState();
-		universe.setResources(displayResources, inputCapturer,gameState);
+		var queueResource = new Queues();
+		universe.setResources(displayResources, inputCapturer,gameState,queueResource);
 	}
 
 	//Runs every frame via heaps.io

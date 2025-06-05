@@ -3,6 +3,7 @@
 -lib heaps
 -lib ecs
 -lib differ
+-lib castle
 -js build.js
 -main Main
 -debug

@@ -8,6 +8,7 @@ import ecs.System;
 import components.*;
 import Types.CollisionGroup;
 import h2d.Text;
+import data.GameData;
 
 // System that is responsible for setting up levels & reacting to win conditions
 class GameSystem extends System {
@@ -47,6 +48,9 @@ class GameSystem extends System {
 		final obstacle1 = universe.createEntity();
 		final obstacle2 = universe.createEntity();
 		final finishSpot = universe.createEntity();
+
+		var img = GameData.entities.get(player).sprite;
+		hxd.Res[img];
 
 		universe.setComponents(playerObject, new Position(0, 0), new Velocity(10, 10), new Sprite(hxd.Res.circle, displayResources.scene, 50, 50),
 			new PlayerControlled(), new Collidable(CollisionGroup.Player, [CollisionGroup.Obstacles]));

@@ -1,6 +1,7 @@
 import resources.*;
 import ecs.Universe;
 import systems.*;
+import data.GameData;
 
 //Haxe Entry point
 class Main extends hxd.App {
@@ -26,12 +27,17 @@ class Main extends hxd.App {
 			]
 		});
 
+		//Init game data
+		GameData.load( hxd.Res.data.entry.getBytes().toString());
+
 		// Setup resources (aka Singletons) for use in ECS retrieval
 		var displayResources = new DisplayResources(s2d);
 		var inputCapturer = new InputCapture();
 		var gameState = new GameState();
 		var queueResource = new Queues();
 		universe.setResources(displayResources, inputCapturer,gameState,queueResource);
+
+		
 	}
 
 	//Runs every frame via heaps.io

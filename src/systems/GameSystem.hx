@@ -1,5 +1,7 @@
 package systems;
 
+import hxd.res.Image;
+import hxd.res.Loader;
 import resources.Queues;
 import resources.GameState;
 import ecs.Universe;
@@ -49,14 +51,17 @@ class GameSystem extends System {
 		final obstacle2 = universe.createEntity();
 		final finishSpot = universe.createEntity();
 
-		var img = GameData.entities.get(player).sprite;
-		hxd.Res[img];
+		//Example of ways to use castleDB
+		var ent = GameData.entities;
+		var imgPath =  GameData.entities.get(Player);
+		var playerImage = hxd.Res.loader.load(imgPath.sprite).toImage();
+		var smallEnemyData = GameData.enemies.get(SmallEnemy);
 
-		universe.setComponents(playerObject, new Position(0, 0), new Velocity(10, 10), new Sprite(hxd.Res.circle, displayResources.scene, 50, 50),
+		universe.setComponents(playerObject, new Position(0, 0), new Velocity(10, 10), new Sprite(playerImage, displayResources.scene, 50, 50),
 			new PlayerControlled(), new Collidable(CollisionGroup.Player, [CollisionGroup.Obstacles]));
-		universe.setComponents(obstacle1, new Position(100, 100), new Sprite(hxd.Res.circle_red, displayResources.scene, 50, 50),
+		universe.setComponents(obstacle1, new Position(100, 100), new Sprite(hxd.Res.circle_red, displayResources.scene, smallEnemyData.size, smallEnemyData.size),
 			new Collidable(CollisionGroup.Obstacles, [CollisionGroup.Player]));
-		universe.setComponents(obstacle2, new Position(200, 200), new Sprite(hxd.Res.circle_red, displayResources.scene, 50, 50),
+		universe.setComponents(obstacle2, new Position(200, 200), new Sprite(hxd.Res.circle_red, displayResources.scene, smallEnemyData.size, smallEnemyData.size),
 			new Collidable(CollisionGroup.Obstacles, [CollisionGroup.Player]));
 		universe.setComponents(finishSpot, new Position(400, 400), new Sprite(hxd.Res.circle_green, displayResources.scene, 50, 50),
 			new Collidable(CollisionGroup.FinishSpot, [CollisionGroup.Player]), new Goal());

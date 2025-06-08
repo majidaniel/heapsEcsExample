@@ -1,0 +1,49 @@
+{
+	"sheets": [
+		{
+			"name": "enemies",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "3",
+					"name": "size"
+				}
+			],
+			"lines": [
+				{
+					"id": "SmallEnemy",
+					"size": 50
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "entities",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"scope": null
+				},
+				{
+					"typeStr": "1",
+					"name": "sprite"
+				}
+			],
+			"lines": [
+				{
+					"id": "Player",
+					"sprite": "circle.png"
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [],
+	"compress": false
+}
